@@ -18,7 +18,7 @@ $(document).ready(function(){
     booksjson = {"output":[]};
     searchterm = "";
     format = "mobi";
-    thisurl = window.location.href;et("format");
+    thisurl = window.location.href;
     searchterm = getSearchParams("searchterm");
     format = getSearchParams("format");
     
