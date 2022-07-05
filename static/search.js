@@ -22,8 +22,19 @@ $(document).ready(function(){
     searchterm = getSearchParams("searchterm");
     format = getSearchParams("format");
     
-    corsproxy = "https://corsproxy.io/?"
+    corsproxy = ["https://corsproxy.io/?", //iffy
+                "https://thingproxy.freeboard.io/fetch/", //Works well
+                "https://api.allorigins.win/get?url=", //returns json. get 'contents'
+                "https://api.codetabs.com/v1/proxy/?quest=" //Remove https:// and DON'T URL encode
+                ]
+    currentproxy = corsproxy[1];
     lgbase = "https://libgen.rs"
+
+    function getcorsproxy(){
+        currentproxy = corsproxy[2];
+        console.log("Using CORS proxy: "+currentproxy);
+        return currentproxy;
+    }
 
     function getauthors(data) {
         authstring="";
@@ -59,7 +70,8 @@ $(document).ready(function(){
     }
 
     function getdllink(link){
-        $.get( corsproxy+encodeURIComponent(link), function( data ) {
+        $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
+            data = (currentproxy==corsproxy[2])?data:data['contents'];
             var parsedres = $($.parseHTML('<div>'+data+'</div>'));
             // dllink = parsedres.find("#download h2 a").attr("href");
             dllink = parsedres.find("#download ul a")[1].href;
@@ -194,7 +206,8 @@ $(document).ready(function(){
         if(booksjson["output"].length-cardindex < cardcount && (!booksjson["pcount"] || currentpage < booksjson["pcount"])){
             currentpage += 1;
             lgurl = "/fiction/?language=English&format=mobi&page=" + currentpage + "&q="
-            $.get( corsproxy+encodeURIComponent(lgbase+lgurl+searchterm), function( data ) {
+            $.get( getcorsproxy()+encodeURIComponent(lgbase+lgurl+searchterm), function( data ) {
+                data = (currentproxy==corsproxy[2])?data['contents']:data;
                 updatebooksjson(fetchjson(data));
                 deduper(cardindex);
                 writecdata(cardindex);
