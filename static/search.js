@@ -71,7 +71,7 @@ $(document).ready(function(){
 
     function getdllink(link){
         $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
-            data = (currentproxy==corsproxy[2])?data:data['contents'];
+            data = (currentproxy==corsproxy[2])?data['contents']:data;
             var parsedres = $($.parseHTML('<div>'+data+'</div>'));
             // dllink = parsedres.find("#download h2 a").attr("href");
             dllink = parsedres.find("#download ul a")[1].href;
