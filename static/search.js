@@ -70,6 +70,7 @@ $(document).ready(function(){
     }
 
     function getdllink(link){
+        if(link=="backtosearch") window.location.href = "/";
         $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
             data = (currentproxy==corsproxy[2])?data['contents']:data;
             var parsedres = $($.parseHTML('<div>'+data+'</div>'));
@@ -98,7 +99,7 @@ $(document).ready(function(){
 
 
     function samebook(a1,a2){
-        if(a1[1]==a2[1] && a1[0]==a2[0])
+        if(a1[0]==a2[0] && a1[1].toUpperCase().replace(/[^\w]/g, "")==a2[1].toUpperCase().replace(/[^\w]/g, ""))
             return true;
         return false;
     }
@@ -163,7 +164,7 @@ $(document).ready(function(){
             booksjson["output"] = booksjson["output"].concat(newjson["output"]);
         }
         if(currentpage >= booksjson["pcount"]){
-            booksjson["output"] = booksjson["output"].concat([["Back to Search","<img src=\"/static/img/tafs.jpg\" style=\"max-width:90%;max-height:90%;width:90%;display:block;margin:auto;\"></img>","",""]]);
+            booksjson["output"] = booksjson["output"].concat([["Back to Search","<img src=\"/static/img/tafs.jpg\" style=\"max-width:90%;max-height:90%;width:90%;display:block;margin:auto;\"></img>","","backtosearch"]]);
         }
     }
 
@@ -205,7 +206,7 @@ $(document).ready(function(){
         currentcardindex = cardindex;
         if(booksjson["output"].length-cardindex < cardcount && (!booksjson["pcount"] || currentpage < booksjson["pcount"])){
             currentpage += 1;
-            lgurl = "/fiction/?language=English&format=mobi&page=" + currentpage + "&q="
+            lgurl = "/fiction/?language=English&format=" + format + "&page=" + currentpage + "&q="
             $.get( getcorsproxy()+encodeURIComponent(lgbase+lgurl+searchterm), function( data ) {
                 data = (currentproxy==corsproxy[2])?data['contents']:data;
                 updatebooksjson(fetchjson(data));
