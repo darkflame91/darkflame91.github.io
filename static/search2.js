@@ -106,7 +106,7 @@ $(document).ready(function(){
 
 
 
-            if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="'+lgbase+imgurl+'" referrerpolicy=no-referrer />';
+            if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="http://library.lol'+imgurl+'" referrerpolicy=no-referrer />';
             // alert(book.find(".bookcover")[0].innerHTML.replace(/.{50}/g, '$&\n'));
             // alert($('.book').find('img').attr('referrerpolicy'));
             // if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" />';
