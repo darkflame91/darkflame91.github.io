@@ -1,8 +1,8 @@
 $(document).ready(function(){
     crow = 0;
     ccol = 0;
-    cwidth = 475;
-    cheight = 600;
+    cwidth = 275;
+    cheight = 400;
     // Half-assed responsiveness
     if($("html").width()<=600){
         cwidth = 150;
@@ -86,8 +86,6 @@ $(document).ready(function(){
     }
 
     function updatecoveranddllink(book){
-        
-        pagerupdate("LOL LOSER");
         link = book.find(".booklink").text();
         if(link=="backtosearch") return;
         $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
@@ -108,13 +106,13 @@ $(document).ready(function(){
 
 
 
-            // if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg" referrerpolicy=no-referrer />';
+            if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="'+lgbase+imgurl+'" referrerpolicy=no-referrer />';
             // alert(book.find(".bookcover")[0].innerHTML.replace(/.{50}/g, '$&\n'));
             // alert($('.book').find('img').attr('referrerpolicy'));
-            if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" />';
-            $('.book').find('img').attr('referrerpolicy',"no-referrer");
-            $('.book').find('img').attr('src',"http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg");
-            alert($('.book').find('img').attr('referrerpolicy'));
+            // if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" />';
+            // $('.book').find('img').attr('referrerpolicy',"no-referrer");
+            // $('.book').find('img').attr('src',"http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg");
+            // alert($('.book').find('img').attr('referrerpolicy'));
 
             $(".footer .fitbox").html('<a href="http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg">THIS SHOULD GO TO THE IMAGE</a>')
             // pagerupdate(encodeURIComponent('<img class="bookimg" src="http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg"></img>'));
