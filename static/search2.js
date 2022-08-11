@@ -114,7 +114,7 @@ $(document).ready(function(){
             // $('.book').find('img').attr('src',"http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg");
             // alert($('.book').find('img').attr('referrerpolicy'));
 
-            $(".footer .fitbox").html('<a href="http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg">THIS SHOULD GO TO THE IMAGE</a>')
+            // $(".footer .fitbox").html('<a href="http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg">THIS SHOULD GO TO THE IMAGE</a>')
             // pagerupdate(encodeURIComponent('<img class="bookimg" src="http://library.lol/fictioncovers/842000/381c516d1b5d8a4bec819faeae69081a.jpg"></img>'));
             book.find(".bookdllink").text() = dllink;
         
@@ -242,7 +242,7 @@ $(document).ready(function(){
         });
 
         $(".book").each(function(i){
-            if(i==0)
+            // if(i==0)
             updatecoveranddllink($(this));
         });
     }
