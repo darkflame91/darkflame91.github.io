@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+    <head>
+		<meta name="referrer" content="no-referrer" />
+		<link rel="stylesheet" type="text/css" media="screen" href="/static/common.css" />
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+		<script type="text/javascript" src="/static/jquery.boxfit.min.js"></script>
+		<script type="text/javascript" src="/static/js.cookie.min.js"></script>
+		<script type="text/javascript" src="/static/common.js"></script>
+        <style>
+              .coverscheckbox {
+                width: 80px;
+                height: 80px;
+              }
+
+              .labels {
+                font-size: 35px;
+              }
+
+              .inputs {
+                padding: 0 40px;
+              }
+
+              select {
+                height: 60px;
+              }
+
+              table {
+                width:95%;
+                margin: 0 auto;
+              }
+        </style>
+        <title>E-Ink LG</title>
+    </head>
+    <body>
+		<div class="header clearfix">
+			<div class="hdiv homebtn">
+				<a href="/index.html"><img src="/static/img/search.png" alt="Home" title="New Search" class="hsearch" height="150px" width="150px"/></a>
+			</div>
+			<div class="hdiv heading">
+				<div class="fitbox headtext">
+					<h1>E-Ink LibGen</h1>
+				</div>
+			</div>
+			<div class="hdiv aboutbtn">
+				<a href=/about.html><img src="/static/img/about.png" alt="About" title="About" class="habout" height="150px" width="150px"/></a>
+			</div>
+		</div>
+		<div class="content clearfix">
+			<div class="prefspage">
+				<form action="" novalidate onsubmit="return false;">
+
+                    <table border=1 rules=all>
+                        <tr>
+                            <td class="labels">
+                                <label for="covers"><b>Display covers</b></label>
+                                <br>Disabling improves page load speed.
+                            </td>
+                            <td class="inputs">
+                                <input type="checkbox" id="covers" name="todo" class="coverscheckbox" checked>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="labels">
+                                <label for="format"><b>Format</b></label>
+                                <br>Choose 'Kindle' or 'Other', unless you know what you're doing.
+                            </td>
+                            <td class="inputs">
+                                <select name="format" id="format">
+                                    <option value="mobi" selected>Kindle (MOBI)</option>
+                                    <option value="epub">Other (EPUB)</option>
+                                    <option value="azw">AZW</option>
+                                    <option value="azw3">AZW3</option>
+                                    <option value="fb2">FB2</option>
+                                    <option value="pdf">PDF</option>
+                                    <option value="rtf">RTF</option>
+                                    <option value="txt">TXT</option>
+                                    <option value="">- any -</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="labels">
+                                <label for="language"><b>Language</b></label>
+                                <br>Only the top languages are shown
+                            </td>
+                            <td class="inputs">
+                                <select name="language" id="language">
+                                    <option value="English" selected>English</option>
+                                    <option value="French">French</option>
+                                    <option value="German">German</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="Dutch">Dutch</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="Hungarian">Hungarian</option>
+                                    <option value="Portuguese">Portuguese</option>
+                                    <option value="Chinese">Chinese</option>
+                                    <option value="Czech">Czech</option>
+                                    <option value="Turkish">Turkish</option>
+                                    <option value="Catalan">Catalan</option>
+                                    <option value="Swedish">Swedish</option>
+                                    <option value="Spanish; Castilian">Spanish; Castilian</option>
+                                    <option value="Dutch; Flemish">Dutch; Flemish</option>
+                                    <option value="Romanian">Romanian</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    
+						<p style="text-align: center;">
+							<br><br>
+							<input class="form-ui" id="submit" name="submit" type="submit" value="Save Preferences">
+						</p>
+				</form>
+			</div>
+		</div>
+		<div class="footer">
+			<span class="fitbox"><p>'Give a man a fire and he's warm for a day, but set fire to him and he's warm for the rest of his life.' - Terry Pratchett</p></span>
+		</div>
+		<script>
+			$(document).ready(function(){
+                
+                if(Cookies.get('covers')!=undefined){
+                    if(Cookies.get('covers')=='false') $('#covers').attr('checked', false);
+                    $("#format").val(Cookies.get('format'));
+                    $("#language").val(Cookies.get('language'));
+                }
+
+                $("#submit").click(function(){
+                    Cookies.set('covers', document.querySelector('#covers').checked, { expires: 365 });
+                    Cookies.set('format', document.getElementById("format").value, { expires: 365 });
+                    Cookies.set('language', document.getElementById("language").value, { expires: 365 });
+
+                    window.location.href = "/"
+                });
+			});
+		</script>
+    </body>
+</html>

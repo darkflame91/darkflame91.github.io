@@ -5,9 +5,10 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="/static/common.css" />
 		<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
 		<script type="text/javascript" src="/static/jquery.boxfit.min.js"></script>
+		<script type="text/javascript" src="/static/js.cookie.min.js"></script>
 		<script type="text/javascript" src="/static/common.js"></script>
 
-        <title>Better LG</title>
+        <title>E-Ink LG</title>
     </head>
     <body>
 		<div class="header clearfix">
@@ -16,7 +17,7 @@
 			</div>
 			<div class="hdiv heading">
 				<div class="fitbox headtext">
-					<h1>Better LibGen</h1>
+					<h1>E-Ink LibGen</h1>
 				</div>
 			</div>
 			<div class="hdiv aboutbtn">
@@ -30,19 +31,40 @@
 							<label class="form-ui" for="searchterm">Search by author, title or series.</label><br>
 							<input class="form-ui" id="searchterm" name="searchterm" size="32" type="text" value=""><br>
 						</p>
-						<p>
+						<!-- <p>
 							<input id="mobi" name="format" type="radio" value="mobi" data-icon="Kindle" checked>
 							<input id="epub" name="format" type="radio" value="epub" data-icon="Other">
-						</p>
+						</p> -->
 						<p>
 							<br><br>
 							<input class="form-ui" id="submit" name="submit" type="submit" value="Search">
 						</p>
 				</form>
+				<br><br><br><br>
+				<h2 style="font-size:25px;">Search Preferences</h2>
+				<table border=0 style="width:35%;margin: 0 auto;">
+					<tr>
+						<td>
+							<input class="form-ui" id="prefs" name="prefs" type="submit" value="Edit">
+						</td>
+						<td id="showprefs" style="font-size:20px;text-align:left;">
+							<div></div>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 		<div class="footer">
 			<span class="fitbox"><p>'Give a man a fire and he's warm for a day, but set fire to him and he's warm for the rest of his life.' - Terry Pratchett</p></span>
 		</div>
+		<script>
+			$(document).ready(function(){
+				$("#showprefs").html("<b>Show Covers: </b>"+((Cookies.get('covers')=='true')?"Yes":"No")+"<br><b>Format: </b>"+Cookies.get('format').replace("mobi","Kindle (mobi)").replace("epub","Other (epub)")+"<br><b>Language: </b>"+Cookies.get('language'));
+
+                $("#prefs").click(function(){
+                    window.location.href = "/prefs.html"
+                });
+			});
+		</script>
     </body>
 </html>

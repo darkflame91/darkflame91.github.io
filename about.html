@@ -5,9 +5,10 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="/static/common.css" />
 		<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
 		<script type="text/javascript" src="/static/jquery.boxfit.min.js"></script>
+		<script type="text/javascript" src="/static/js.cookie.min.js"></script>
 		<script type="text/javascript" src="/static/common.js"></script>
 
-        <title>Better LG</title>
+        <title>E-Ink LG</title>
     </head>
     <body>
 		<div class="header clearfix">
@@ -16,7 +17,7 @@
 			</div>
 			<div class="hdiv heading">
 				<div class="fitbox headtext">
-					<h1>Better LibGen</h1>
+					<h1>E-Ink LibGen</h1>
 				</div>
 			</div>
 			<div class="hdiv aboutbtn">
@@ -27,13 +28,14 @@
 			<p style="position: fixed; margin:5%;">
 				This page needs to be formatted properly.<br><br>
 
-				You can search with a combination of keywords from title, author and/or series.<br><br>
+				You can search with a combination of keywords from title, author and/or series.<br>
+				If you are facing issues, please check your browser settings and enable javascript and cookies.<br><br>
 
 				This site is simply a frontend for Library Genesis that's suitable for e-ink readers.<br>
 				This site is officially intended for books that are out of copyright. This site does not host files, and does not condone piracy.<br>
 				This site consists of static webpages, with all parsing happening on the client-side (and therefore, open-source by default)<br>
-				Search results and download links are fetched by scraping the corresponding libgen pages.<br>
-				Choosing 'Kindle' when searching returns results in the .mobi format. If not, then in .epub format.<br><br>
+				This site is completely portable - You can save the entire website and host it on your own WSGI server.<br>
+				Search results and download links are fetched by scraping the corresponding libgen pages.<br><br>
 
 				kthnxbye
 			</p>

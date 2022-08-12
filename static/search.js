@@ -1,12 +1,17 @@
 $(document).ready(function(){
+
+    prefcovers = (Cookies.get('covers')=='true');
+    preflanguage = (Cookies.get('language')==undefined)?"English":Cookies.get('language');
+    prefformat = (Cookies.get('format')==undefined)?"mobi":Cookies.get('format');
+
     crow = 0;
     ccol = 0;
     cwidth = 275;
-    cheight = 350;
+    cheight = 400;
     // Half-assed responsiveness
     if($("html").width()<=600){
         cwidth = 150;
-        cheight = 200;
+        cheight = 225;
     }
     
     function getSearchParams(k){
@@ -17,7 +22,6 @@ $(document).ready(function(){
 
     booksjson = {"output":[]};
     searchterm = "";
-    format = "mobi";
     thisurl = window.location.href;
     searchterm = getSearchParams("searchterm");
     format = getSearchParams("format");
@@ -69,6 +73,10 @@ $(document).ready(function(){
         return {"searchterm":searchterm,"bcount":lgbcount,"pcount":lgpcount,"output":outarr}
     }
 
+    function pagerupdate(text){
+        $("#pager").html(text)
+    }
+
     function getdllink(link){
         if(link=="backtosearch") window.location.href = "/";
         $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
@@ -78,6 +86,21 @@ $(document).ready(function(){
             // dllink = parsedres.find("#download ul a")[1].href;
             console.log(dllink);
             window.location.href = dllink;
+        });
+    }
+
+    function updatecoveranddllink(book){
+        link = book.find(".booklink").text();
+        if(link=="backtosearch") return;
+        $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
+            data = (currentproxy==corsproxy[2])?data['contents']:data;
+            var parsedres = $($.parseHTML('<div>'+data+'</div>'));
+            dllink = parsedres.find("#download h2 a").attr("href");
+            // dllink = parsedres.find("#download ul a")[1].href;
+            imgurl = parsedres.find("img").attr("src");
+            if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="http://library.lol'+imgurl+'" referrerpolicy=no-referrer />';
+            // if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="/static/img/tmp.jpg" referrerpolicy=no-referrer />';
+            book.find(".bookdllink").text() = dllink;
         });
     }
 
@@ -152,7 +175,9 @@ $(document).ready(function(){
         title = cdata[1];
         size = cdata[2];
         link = cdata[3];
-        htmlstring = '<div class="book"><div class="bookdetails bookcover"><div class="fitbox">'+title+'</div></div><div class="bookdetails bookauthor"><div class="fitbox"><p class="cardtext">'+author+'</p></div></div><div class="bookdetails booksize"><div class="fitbox"><p class="cardtext">'+size+'</p></div></div><div class="booklink" style="display: none;">'+link+'</div></div>'
+        htmlstring = "";
+        if(prefcovers) htmlstring = '<div class="book"><div class="bookdetails bookcover"><div class="fitbox">'+title+'</div></div><div class="bookdetails booktitle"><div class="fitbox"><p class="cardtext">'+((title.indexOf("<img ")==-1)?title:"")+'</p></div></div><div class="bookdetails bookauthor"><div class="fitbox"><p class="cardtext">'+author+'</p></div></div><div class="bookdetails booksize"><div class="fitbox"><p class="cardtext">'+size+'</p></div></div><div class="booklink" style="display: none;">'+link+'</div><div class="bookdllink" style="display: none;">blank</div></div>'
+        else htmlstring = '<div class="book"><div class="bookdetails bookcover"><div class="fitbox">'+title+'</div></div><div class="bookdetails bookauthornocover"><div class="fitbox"><p class="cardtext">'+author+'</p></div></div><div class="bookdetails booksize"><div class="fitbox"><p class="cardtext">'+size+'</p></div></div><div class="booklink" style="display: none;">'+link+'</div><div class="bookdllink" style="display: none;">blank</div></div>'
         return htmlstring;
     }
 
@@ -166,10 +191,6 @@ $(document).ready(function(){
         if(currentpage >= booksjson["pcount"]){
             booksjson["output"] = booksjson["output"].concat([["Back to Search","<img src=\"/static/img/tafs.jpg\" style=\"max-width:90%;max-height:90%;width:90%;display:block;margin:auto;\"></img>","","backtosearch"]]);
         }
-    }
-
-    function pagerupdate(text){
-        $("#pager").html(text)
     }
 
     function writecdata(cardindex){
@@ -196,8 +217,18 @@ $(document).ready(function(){
         }
 
         $(".book").click(function(){
-            getdllink($(this).find(".booklink").text());
+            if($(this).find(".bookdllink").text()=="blank"){
+                getdllink($(this).find(".booklink").text());
+            }else{
+                window.location.href = $(this).find(".bookdllink").text();
+            }
         });
+
+        if(prefcovers){
+            $(".book").each(function(i){
+                updatecoveranddllink($(this));
+            });
+        }
     }
 
     function updatecards(cardindex) {
@@ -206,7 +237,7 @@ $(document).ready(function(){
         currentcardindex = cardindex;
         if(booksjson["output"].length-cardindex < cardcount && (!booksjson["pcount"] || currentpage < booksjson["pcount"])){
             currentpage += 1;
-            lgurl = "/fiction/?language=English&format=" + format + "&page=" + currentpage + "&q="
+            lgurl = "/fiction/?language=" + preflanguage + "&format=" + prefformat + "&page=" + currentpage + "&q="
             $.get( getcorsproxy()+encodeURIComponent(lgbase+lgurl+searchterm), function( data ) {
                 data = (currentproxy==corsproxy[2])?data['contents']:data;
                 updatebooksjson(fetchjson(data));

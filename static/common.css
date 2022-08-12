@@ -109,7 +109,7 @@ html, body{
   }
 
 .bookcover  {
-    display: block;
+    display: flex;
     margin: 0 auto;
     width: 100%;
     height: 70%;
@@ -126,12 +126,27 @@ html, body{
     height: 100%;
 }
 
-.bookauthor {
-    height: 20%;
+.bookimg{
+    height:100%;
+    margin: 0px auto;
+    max-width: 100%;
+}
+
+.booktitle{
+    height: 15%;
+    background-color:#bbbbbb;
+}
+
+.bookauthor{
+    height: 8%;
+}
+
+.bookauthornocover{
+    height: 23%;
 }
 
 .booksize {
-    height: 10%;
+    height: 7%;
     background-color:#cccccc;
 }
 
