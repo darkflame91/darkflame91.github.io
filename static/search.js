@@ -98,7 +98,7 @@ $(document).ready(function(){
             dllink = parsedres.find("#download h2 a").attr("href");
             // dllink = parsedres.find("#download ul a")[1].href;
             imgurl = parsedres.find("img").attr("src");
-            if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="http://library.lol'+imgurl+'" referrerpolicy=no-referrer />';
+            if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="http://library.lol'+imgurl+'" referrerpolicy=no-referrer onerror="this.onerror=null;this.src=\'https://images.weserv.nl/?url=http://library.lol'+imgurl+'\';"/>';
             // if(imgurl != undefined) book.find(".bookcover")[0].innerHTML = '<img class="bookimg" src="/static/img/tmp.jpg" referrerpolicy=no-referrer />';
             book.find(".bookdllink").text() = dllink;
         });
