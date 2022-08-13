@@ -47,6 +47,10 @@
 			</div>
 		</div>
 		<div class="content clearfix">
+			<noscript>
+				<center><h2>You need to enable javascript and cookies to use this site. Please enable in browser settings and refresh the page.</h2></center>
+				<br><br>
+			</noscript>
 			<div class="prefspage">
 				<form action="" novalidate onsubmit="return false;">
 
@@ -120,6 +124,15 @@
 		<script>
 			$(document).ready(function(){
                 
+                // Half-assed responsiveness
+                if($("html").width()<=600){
+                    $(".coverscheckbox").css("width", "40px");
+                    $(".coverscheckbox").css("height", "40px");
+                    $(".labels").css("font-size", "20px");
+                    $(".inputs").css("padding", "0 20px");
+                    $("select").css("height", "30px");
+                }
+
                 if(Cookies.get('covers')!=undefined){
                     if(Cookies.get('covers')=='false') $('#covers').attr('checked', false);
                     $("#format").val(Cookies.get('format'));
@@ -127,9 +140,9 @@
                 }
 
                 $("#submit").click(function(){
-                    Cookies.set('covers', document.querySelector('#covers').checked, { expires: 365 });
-                    Cookies.set('format', document.getElementById("format").value, { expires: 365 });
-                    Cookies.set('language', document.getElementById("language").value, { expires: 365 });
+                    Cookies.set('covers', document.querySelector('#covers').checked, { expires: 3650 });
+                    Cookies.set('format', document.getElementById("format").value, { expires: 3650 });
+                    Cookies.set('language', document.getElementById("language").value, { expires: 3650 });
 
                     window.location.href = "/"
                 });

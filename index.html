@@ -25,6 +25,10 @@
 			</div>
 		</div>
 		<div class="content clearfix">
+			<noscript>
+				<center><h2>You need to enable javascript and cookies to use this site. Please enable in browser settings and refresh the page.</h2></center>
+				<br><br>
+			</noscript>
 			<div class="searchpage">
 				<form action="/search.html" novalidate>
 						<p>
@@ -40,9 +44,9 @@
 							<input class="form-ui" id="submit" name="submit" type="submit" value="Search">
 						</p>
 				</form>
-				<br><br><br><br>
+				<br><br>
 				<h2 style="font-size:25px;">Search Preferences</h2>
-				<table border=0 style="width:35%;margin: 0 auto;">
+				<table border=0 style="width:40%;margin: 0 auto;" id="prefstable">
 					<tr>
 						<td>
 							<input class="form-ui" id="prefs" name="prefs" type="submit" value="Edit">
@@ -60,6 +64,12 @@
 		<script>
 			$(document).ready(function(){
 				$("#showprefs").html("<b>Show Covers: </b>"+((Cookies.get('covers')=='true')?"Yes":"No")+"<br><b>Format: </b>"+Cookies.get('format').replace("mobi","Kindle (mobi)").replace("epub","Other (epub)")+"<br><b>Language: </b>"+Cookies.get('language'));
+				
+                // Half-assed responsiveness
+                if($("html").width()<=600){
+                    $("#prefs").css("font-size", "20px");
+                    $("#prefstable").css("width", "60%");
+                }
 
                 $("#prefs").click(function(){
                     window.location.href = "/prefs.html"
