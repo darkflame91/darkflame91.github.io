@@ -96,8 +96,8 @@ $(document).ready(function(){
     }
 
     function getdllink(link){
-        if(link=="backtosearch") window.location.href = "/index.html";
-        if(link=="settings") window.location.href = "/prefs.html";
+        if(link=="backtosearch") window.location.href = "./index.html";
+        if(link=="settings") window.location.href = "./prefs.html";
         $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
             data = (currentproxy==corsproxy[2])?data['contents']:data;
             var parsedres = $($.parseHTML('<div>'+data+'</div>'));
