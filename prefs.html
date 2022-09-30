@@ -30,6 +30,36 @@
                 width:95%;
                 margin: 0 auto;
               }
+
+              .inputficsci {
+                margin: 0 auto;
+                width: 100%;
+                padding: 1% 1%;
+                text-align: center;
+                font-size: 35px;
+              }
+              input[name='ficsci'] {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                -o-appearance: none;
+                appearance: none;
+                outline: none;
+              }
+              input[name='ficsci']:after {
+                display: inline-block;
+                text-align: center;
+                font-size: 35px;
+                content: attr(data-icon);
+                padding: 20px 20px;
+                border-radius: 15px;
+                color: rgba(0, 0, 0, 1);
+                transition: box-shadow 0.1s, color 0.1s;
+              }
+              input[name='ficsci']:checked:after {
+                box-shadow: 2px 2px 14px rgba(0, 0, 0, 0.6);
+                color: rgba(0, 0, 0, 1);
+                font-weight: bold;
+              }
         </style>
         <title>E-Ink LG</title>
     </head>
@@ -53,7 +83,7 @@
 				<br><br>
 			</noscript>
 			<div class="prefspage">
-				<form action="" novalidate onsubmit="return false;">
+				<form action="" novalidate onsubmit="return false;" name="searchform">
 
                     <table border=1 rules=all>
                         <tr>
@@ -62,7 +92,16 @@
                                 <br>Disabling improves page load speed.
                             </td>
                             <td class="inputs">
-                                <input type="checkbox" id="covers" name="todo" class="coverscheckbox" checked>
+                                <input type="checkbox" id="covers" name="covers" class="coverscheckbox" checked>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inputficsci" colspan="2">
+                                
+                                <input type="radio" name="ficsci" id="fic" value="fic" onclick="handleFicSci(this);" data-icon='Fiction' checked>
+                                <input type="radio" name="ficsci" id="sci" value="sci" onclick="handleFicSci(this);" data-icon='Sci-Tech & Non-Fiction'>
+                                <br>
+                                Below options are available only for Fiction
                             </td>
                         </tr>
                         <tr>
@@ -109,6 +148,7 @@
                                     <option value="Romanian">Romanian</option>
                                     <option value="Polish">Polish</option>
                                     <option value="Russian">Russian</option>
+                                    <option value="">- any -</option>
                                 </select>
                             </td>
                         </tr>
@@ -116,7 +156,7 @@
                     
 						<p style="text-align: center;">
 							<br><br>
-							<input class="form-ui" id="submit" name="submit" type="submit" value="Save Preferences">
+							<input class="form-ui" id="submit" name="submit" type="submit" value="Save and Return">
 						</p>
 				</form>
 			</div>
@@ -136,20 +176,51 @@
                     $("select").css("height", "30px");
                 }
 
-                if(Cookies.get('covers')!=undefined){
+                if(Cookies.get('version')!=undefined){
                     if(Cookies.get('covers')=='false') $('#covers').attr('checked', false);
+                    $("#ficsci").val(Cookies.get('ficsci'));
                     $("#format").val(Cookies.get('format'));
                     $("#language").val(Cookies.get('language'));
+                    if(Cookies.get('ficsci')=='sci'){
+                        $('#sci').attr('checked', true);
+                        document.getElementById("format").disabled = true;
+                        document.getElementById("language").disabled = true;
+                    }else{
+                        $('#fic').attr('checked', true);
+                        document.getElementById("format").disabled = false;
+                        document.getElementById("language").disabled = false;
+                    }
                 }
 
                 $("#submit").click(function(){
                     Cookies.set('covers', document.querySelector('#covers').checked, { expires: 3650 });
                     Cookies.set('format', document.getElementById("format").value, { expires: 3650 });
                     Cookies.set('language', document.getElementById("language").value, { expires: 3650 });
+                    Cookies.set('ficsci', $('input[name="ficsci"]:checked').val(), { expires: 3650 });
+                    Cookies.set('version',"20220929", { expires: 3650 });
 
-                    window.location.href = "/"
+                    window.history.go(-1)
+                    /*if (document.referrer.indexOf("search.html")!=-1){
+                        window.location.href = document.referrer;
+                    }else{
+                        window.location.href = "/";
+                    }*/
                 });
 			});
+            
+            function handleFicSci(ficsci) {
+                if(ficsci.value=="fic"){
+                    document.getElementById("format").value="mobi";
+                    document.getElementById("language").value="English";
+                    document.getElementById("format").disabled = false;
+                    document.getElementById("language").disabled = false;
+                }else{
+                    document.getElementById("format").value="";
+                    document.getElementById("language").value="";
+                    document.getElementById("format").disabled = true;
+                    document.getElementById("language").disabled = true;
+                }
+            }
 		</script>
     </body>
 </html>

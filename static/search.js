@@ -3,6 +3,7 @@ $(document).ready(function(){
     prefcovers = (Cookies.get('covers')=='true');
     preflanguage = (Cookies.get('language')==undefined)?"English":Cookies.get('language');
     prefformat = (Cookies.get('format')==undefined)?"mobi":Cookies.get('format');
+    prefficsci = (Cookies.get('ficsci')==undefined)?"fic":Cookies.get('ficsci');
 
     crow = 0;
     ccol = 0;
@@ -53,21 +54,38 @@ $(document).ready(function(){
         lgbcount = 0;
         lgpcount = 0;
         var parsedres = $($.parseHTML('<div>'+data+'</div>'));
-        if (parsedres.html().search("No files were found") >= 0){
-            outarr.push(["","No books found! :(","",""]);
+        if (parsedres.html().search("No files were found") >= 0 || (prefficsci=="sci" && (parsedres.find("table")[1].children[0].children[0].children[0].children[0].innerHTML == "0 files found"))){
+            outarr.push(["No books found!","&#9785;","",""]);
+            outarr.push(["Try changing","<img src=\"/static/img/settings.png\" style=\"max-width:90%;max-height:90%;width:90%;display:block;margin:auto;\"></img>","the search settings","settings"]);
         }else{
-            $(".cardcontents").html(parsedres.find(".catalog_paginator")[0].children[0].innerHTML.replace("&nbsp;",""));
-            lgbcount = parseInt(parsedres.find(".catalog_paginator")[0].children[0].innerHTML.replace("&nbsp;","").split(" ")[0]);
-            lgpcount = (lgbcount<26)?1:parseInt(parsedres.find(".page_selector")[0].innerHTML.split(" ")[3]);
-            
-            bookshtml=parsedres.find(".catalog")[0].getElementsByTagName("tr");
-            for(i=1;i<bookshtml.length;i++){
-                bookhtml=bookshtml[i];
-                author = getauthors(bookhtml.getElementsByClassName("catalog_authors")[0]);
-                title = bookhtml.getElementsByTagName("td")[2].getElementsByTagName("a")[0].text;
-                size = bookhtml.getElementsByTagName("td")[4].textContent.substring(7);
-                link = bookhtml.getElementsByTagName("td")[5].getElementsByTagName("a")[0].href;
-                outarr.push([author,title,size,link]);
+            if(prefficsci=="sci"){
+                lgbcount = parseInt(parsedres.find("table")[1].children[0].children[0].children[0].children[0].innerHTML.replace("&nbsp;","").split(" ")[0]);
+                lgpcount = 0; //not needed
+
+                bookshtml = parsedres.find("table")[2].getElementsByTagName("tr");
+                for(i=1;i<bookshtml.length;i++){
+                    console.log(bookshtml[i]);
+                    deetslist = bookshtml[i].getElementsByTagName("td");
+                    author = getauthors(deetslist[1]);
+                    title = deetslist[2].getElementsByTagName("a")[deetslist[2].getElementsByTagName("a").length-1].innerHTML.split("<br>")[0];
+                    size = deetslist[8].innerHTML.toUpperCase() + " / " + deetslist[7].innerHTML + " / " + deetslist[6].innerHTML;
+                    link = deetslist[9].getElementsByTagName("a")[0].href;
+                    outarr.push([author,title,size,link]);
+                }
+            }else{
+                $(".cardcontents").html(parsedres.find(".catalog_paginator")[0].children[0].innerHTML.replace("&nbsp;",""));
+                lgbcount = parseInt(parsedres.find(".catalog_paginator")[0].children[0].innerHTML.replace("&nbsp;","").split(" ")[0]);
+                lgpcount = (lgbcount<26)?1:parseInt(parsedres.find(".page_selector")[0].innerHTML.split(" ")[3]);
+                
+                bookshtml=parsedres.find(".catalog")[0].getElementsByTagName("tr");
+                for(i=1;i<bookshtml.length;i++){
+                    bookhtml=bookshtml[i];
+                    author = getauthors(bookhtml.getElementsByClassName("catalog_authors")[0]);
+                    title = bookhtml.getElementsByTagName("td")[2].getElementsByTagName("a")[0].text;
+                    size = bookhtml.getElementsByTagName("td")[4].textContent.replace(/\u00a0/g," ");//.substring(7);
+                    link = bookhtml.getElementsByTagName("td")[5].getElementsByTagName("a")[0].href;
+                    outarr.push([author,title,size,link]);
+                }
             }
         }
         return {"searchterm":searchterm,"bcount":lgbcount,"pcount":lgpcount,"output":outarr}
@@ -79,6 +97,7 @@ $(document).ready(function(){
 
     function getdllink(link){
         if(link=="backtosearch") window.location.href = "/index.html";
+        if(link=="settings") window.location.href = "/prefs.html";
         $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
             data = (currentproxy==corsproxy[2])?data['contents']:data;
             var parsedres = $($.parseHTML('<div>'+data+'</div>'));
@@ -91,7 +110,7 @@ $(document).ready(function(){
 
     function updatecoveranddllink(book){
         link = book.find(".booklink").text();
-        if(link=="backtosearch") return;
+        if(link=="backtosearch" || link=="settings") return;
         $.get( getcorsproxy()+encodeURIComponent(link), function( data ) {
             data = (currentproxy==corsproxy[2])?data['contents']:data;
             var parsedres = $($.parseHTML('<div>'+data+'</div>'));
@@ -122,15 +141,18 @@ $(document).ready(function(){
 
 
     function samebook(a1,a2){
-        if(a1[0]==a2[0] && a1[1].toUpperCase().replace(/[^\w]/g, "")==a2[1].toUpperCase().replace(/[^\w]/g, ""))
-            return true;
+        if((prefficsci=="fic") || (prefficsci=="sci" && (a1[2].split(" / ")[a1[2].split(" / ").length-1]==a1[2].split(" / ")[a2[2].split(" / ").length-1]))){
+            if(a1[0].toUpperCase().replace(/[^\w]/g, "")==a2[0].toUpperCase().replace(/[^\w]/g, "") && a1[1].toUpperCase().replace(/[^\w]/g, "")==a2[1].toUpperCase().replace(/[^\w]/g, "") && (a1[2].split(" / ")[0] == a2[2].split(" / ")[0])){
+                return true;
+            }
+        }
         return false;
     }
     
     //True if a1 > a2
     function biggerbook(a1,a2){
-        s1=a1[2].split(" ")
-        s2=a2[2].split(" ")
+        s1=a1[2].split(" / ")[1].split(" ");
+        s2=a2[2].split(" / ")[1].split(" ");
         
         if(s1[1]==s2[1]){
             if(parseFloat(s1[0])>parseFloat(s2[0])){
@@ -232,17 +254,21 @@ $(document).ready(function(){
     }
 
     function updatecards(cardindex) {
-        pagerupdate("Loading...")
+        pagerupdate("Loading...");
         cardindex = cardindex?cardindex:0;
         currentcardindex = cardindex;
         if(booksjson["output"].length-cardindex < cardcount && (!booksjson["pcount"] || currentpage < booksjson["pcount"])){
             currentpage += 1;
-            lgurl = "/fiction/?language=" + preflanguage + "&format=" + prefformat + "&page=" + currentpage + "&q="
+            if(prefficsci=="sci"){
+                lgurl = "/search.php?page="+ currentpage +"&open=0&res=25&view=simple&phrase=1&column=def&req="
+            }else{
+                lgurl = "/fiction/?language=" + preflanguage + "&format=" + prefformat + "&page=" + currentpage + "&q="
+            }
             $.get( getcorsproxy()+encodeURIComponent(lgbase+lgurl+searchterm), function( data ) {
-                data = (currentproxy==corsproxy[2])?data['contents']:data;
-                updatebooksjson(fetchjson(data));
-                deduper(cardindex);
-                writecdata(cardindex);
+            data = (currentproxy==corsproxy[2])?data['contents']:data;
+            updatebooksjson(fetchjson(data));
+            deduper(cardindex);
+            writecdata(cardindex);
             });
                 
         }else{

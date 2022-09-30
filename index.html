@@ -21,6 +21,9 @@
 					<h1>E-Ink LibGen</h1>
 				</div>
 			</div>
+			<div class="hdiv settingsbtn">
+				<a href=/prefs.html><img src="/static/img/settings.png" alt="Preferences" title="Preferences" class="habout" height="150px" width="150px"/></a>
+			</div>
 			<div class="hdiv aboutbtn">
 				<a href=/about.html><img src="/static/img/about.png" alt="About" title="About" class="habout" height="150px" width="150px"/></a>
 			</div>
@@ -47,7 +50,7 @@
 				</form>
 				<br><br>
 				<h2 style="font-size:25px;">Search Preferences</h2>
-				<table border=0 style="width:40%;margin: 0 auto;" id="prefstable">
+				<table border=0 style="width:45%;margin: 0 auto;" id="prefstable">
 					<tr>
 						<td>
 							<input class="form-ui" id="prefs" name="prefs" type="submit" value="Edit">
@@ -64,7 +67,7 @@
 		</div>
 		<script>
 			$(document).ready(function(){
-				$("#showprefs").html("<b>Show Covers: </b>"+((Cookies.get('covers')=='true')?"Yes":"No")+"<br><b>Format: </b>"+Cookies.get('format').replace("mobi","Kindle (mobi)").replace("epub","Other (epub)")+"<br><b>Language: </b>"+Cookies.get('language'));
+				$("#showprefs").html("<b>Show Covers: </b>"+((Cookies.get('covers')=='true')?"Yes":"No")+"<br><b>Library: </b>"+((Cookies.get('ficsci')=='fic')?"Fiction":"Sci-Tech & Non Fiction")+"<br><b>Format: </b>"+((Cookies.get('format').length==0)?"- any -":Cookies.get('format').replace("mobi","Kindle (mobi)").replace("epub","Other (epub)"))+"<br><b>Language: </b>"+((Cookies.get('language').length==0)?"- any -":Cookies.get('language')));
 				
                 // Half-assed responsiveness
                 if($("html").width()<=600){

@@ -13,7 +13,7 @@ html, body{
 }
 
 .header {
-    height: 10%;
+    height: 9%;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -41,24 +41,29 @@ html, body{
 .hdiv {
     display: inline-block;
     position: fixed;
-    height:10%;
+    height:7%;
     vertical-align: middle;
     text-align: center;
     align-items: center;
-    margin: auto 2%;
+    /* margin: auto 2%; */
+    margin: 1% 2%;
 }
 
 .hdiv:not(.heading) {
-    width:15%;
+    width:10%;
 }
 
 .heading {
     width: 65%;
-    left: 15%;
+    left: 10%;
 }
 
 .aboutbtn {
     right: 0;
+}
+
+.settingsbtn {
+    right: 12%;
 }
 
 .headtext {
