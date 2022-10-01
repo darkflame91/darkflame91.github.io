@@ -60,7 +60,7 @@ $(document).ready(function(){
         }else{
             if(prefficsci=="sci"){
                 lgbcount = parseInt(parsedres.find("table")[1].children[0].children[0].children[0].children[0].innerHTML.replace("&nbsp;","").split(" ")[0]);
-                lgpcount = 0; //not needed
+                lgpcount = Math.ceil(lgbcount/25);
 
                 bookshtml = parsedres.find("table")[2].getElementsByTagName("tr");
                 for(i=1;i<bookshtml.length;i++){
