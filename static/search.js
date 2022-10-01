@@ -55,7 +55,7 @@ $(document).ready(function(){
         lgpcount = 0;
         var parsedres = $($.parseHTML('<div>'+data+'</div>'));
         if (parsedres.html().search("No files were found") >= 0 || (prefficsci=="sci" && (parsedres.find("table")[1].children[0].children[0].children[0].children[0].innerHTML == "0 files found"))){
-            outarr.push(["No books found!","&#9785;","",""]);
+            outarr.push(["No results found for:","&#9785;","'"+searchterm+"'",""]);
             outarr.push(["Try changing","<img src=\"/static/img/settings.png\" style=\"max-width:90%;max-height:90%;width:90%;display:block;margin:auto;\"></img>","the search settings","settings"]);
         }else{
             if(prefficsci=="sci"){
